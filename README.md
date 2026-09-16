@@ -8,7 +8,6 @@ Each skill in `skills/` handles a piece of the migration workflow: cloning pages
 
 | Skill | What it does |
 | --- | --- |
-| `brain-drop/` | Route dropped content into the right place |
 | `collection-builder/` | Model and populate Webflow CMS collections from extraction output |
 | `mast-brand-injector/` | Inject brand tokens and build the MAST variable set and foundation pages |
 | `page-cloner/` | Scrape a page, slice it into sections, and clone it |

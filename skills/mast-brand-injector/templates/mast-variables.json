@@ -1,0 +1,247 @@
+{
+  "_meta": {
+    "description": "Complete MAST variable taxonomy extracted from the MAST cloneable. Used for deterministic variable creation in blank Webflow projects via MCP.",
+    "source": "migration-proj (69c4154247cf706fd75f7e3c)",
+    "extracted": "2026-03-30",
+    "total_collections": 5,
+    "total_variables": 103
+  },
+  "collections": [
+    {
+      "name": "Color",
+      "order": 1,
+      "description": "Raw color palette. These are the atomic color values — never used directly in styles, only referenced by Theme variables.",
+      "variables": [
+        {"name": "Primary/{ColorName}", "nameTemplate": "Primary/{colorName}", "type": "Color", "value": "#d14424", "brandToken": "primaryAccent"},
+        {"name": "Primary/Dark {ColorName}", "nameTemplate": "Primary/Dark {colorName}", "type": "Color", "value": "#9c331b", "brandToken": "primaryAccentDark"},
+        {"name": "Secondary/{ColorName}", "nameTemplate": "Secondary/{colorName}", "type": "Color", "value": "#0073e6", "brandToken": "infoColor"},
+        {"name": "Secondary/{ColorName}", "nameTemplate": "Secondary/{colorName}", "type": "Color", "value": "#f8d47a", "brandToken": "secondaryColor"},
+        {"name": "Neutral/White", "type": "Color", "cssName": "--_color---neutral--white", "value": "white", "brandToken": null},
+        {"name": "Neutral/Light Gray", "type": "Color", "cssName": "--_color---neutral--light-gray", "value": "#f0eee6", "brandToken": null},
+        {"name": "Neutral/Mid Gray 1", "type": "Color", "cssName": "--_color---neutral--mid-gray-1", "value": "#cccabf", "brandToken": "borderLight"},
+        {"name": "Neutral/Mid Gray 2", "type": "Color", "cssName": "--_color---neutral--mid-gray-2", "value": "#474641", "brandToken": "borderDark"},
+        {"name": "Neutral/Dark Gray", "type": "Color", "cssName": "--_color---neutral--dark-gray", "value": "#292825", "brandToken": null},
+        {"name": "Neutral/Black", "type": "Color", "cssName": "--_color---neutral--black", "value": "#1d1c1a", "brandToken": "textLight"}
+      ]
+    },
+    {
+      "name": "Theme",
+      "order": 2,
+      "description": "Semantic color tokens used in styles. Reference Color variables. Has an 'Accent' mode for alternate section styling.",
+      "modes": [
+        {"name": "Base", "description": "Default mode — standard light/dark theme"},
+        {"name": "Accent", "description": "Alternate section styling with tinted backgrounds"}
+      ],
+      "variables": [
+        {
+          "name": "Primary/Background",
+          "type": "Color",
+          "cssName": "--primary--background",
+          "value": {"type": "custom", "value": "light-dark(var(--_color---neutral--white), var(--_color---neutral--black))"},
+          "modeValues": {"Accent": {"type": "custom", "value": "light-dark(var(--_color---neutral--light-gray), var(--_color---neutral--dark-gray))"}}
+        },
+        {
+          "name": "Primary/Text",
+          "type": "Color",
+          "cssName": "--primary--text",
+          "value": {"type": "custom", "value": "light-dark(var(--_color---neutral--black), var(--_color---neutral--white))"},
+          "modeValues": {"Accent": {"type": "custom", "value": "light-dark(var(--_color---neutral--black), var(--_color---neutral--white))"}}
+        },
+        {
+          "name": "Primary/Border",
+          "type": "Color",
+          "cssName": "--primary--border",
+          "value": {"type": "custom", "value": "light-dark(var(--_color---neutral--mid-gray-1), var(--_color---neutral--mid-gray-2))"},
+          "modeValues": {"Accent": {"type": "custom", "value": "light-dark(var(--_color---neutral--mid-gray-1), var(--_color---neutral--mid-gray-2))"}}
+        },
+        {
+          "name": "Primary/Accent",
+          "type": "Color",
+          "cssName": "--primary--accent",
+          "value": {"type": "alias", "references": "{primaryColorVar}"},
+          "modeValues": {"Accent": {"type": "alias", "references": "{primaryColorVar}"}}
+        },
+        {
+          "name": "Primary/Accent Dark",
+          "type": "Color",
+          "cssName": "--primary--accent-dark",
+          "value": {"type": "alias", "references": "{primaryDarkColorVar}"},
+          "modeValues": {"Accent": {"type": "alias", "references": "{primaryDarkColorVar}"}}
+        }
+      ]
+    },
+    {
+      "name": "Typography",
+      "order": 3,
+      "description": "Complete type system. Font families alias to Primary Font. Each heading/paragraph level has: Font, Font Size (fluid clamp), Font Size Min/Max (rem), Font Weight, Line Height, Letter Spacing, Bottom Margin.",
+      "variables": [
+        {"name": "Fonts/Primary Font", "type": "FontFamily", "cssName": "--_typography---fonts--primary-font", "value": "General Sans", "brandToken": "fontFamily"},
+
+        {"_group": "H1", "name": "H1/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H1/Font Size Min (rem)", "type": "Number", "value": 2.8},
+        {"name": "H1/Font Size Max (rem)", "type": "Number", "value": 5.5},
+        {"name": "H1/Font Weight", "type": "Number", "value": 500},
+        {"name": "H1/Line Height", "type": "Number", "value": 1},
+        {"name": "H1/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": -0.02}},
+        {"name": "H1/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.2}},
+
+        {"_group": "H2", "name": "H2/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H2/Font Size Min (rem)", "type": "Number", "value": 2},
+        {"name": "H2/Font Size Max (rem)", "type": "Number", "value": 3.8},
+        {"name": "H2/Font Weight", "type": "Number", "value": 500},
+        {"name": "H2/Line Height", "type": "Number", "value": 1.1},
+        {"name": "H2/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": -0.02}},
+        {"name": "H2/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.2}},
+
+        {"_group": "H3", "name": "H3/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H3/Font Size Min (rem)", "type": "Number", "value": 1.5},
+        {"name": "H3/Font Size Max (rem)", "type": "Number", "value": 2.3},
+        {"name": "H3/Font Weight", "type": "Number", "value": 500},
+        {"name": "H3/Line Height", "type": "Number", "value": 1.2},
+        {"name": "H3/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "H3/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.3}},
+
+        {"_group": "H4", "name": "H4/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H4/Font Size Min (rem)", "type": "Number", "value": 1.3},
+        {"name": "H4/Font Size Max (rem)", "type": "Number", "value": 1.5},
+        {"name": "H4/Font Weight", "type": "Number", "value": 500},
+        {"name": "H4/Line Height", "type": "Number", "value": 1.4},
+        {"name": "H4/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "H4/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.4}},
+
+        {"_group": "H5", "name": "H5/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H5/Font Size Min (rem)", "type": "Number", "value": 1.1},
+        {"name": "H5/Font Size Max (rem)", "type": "Number", "value": 1.2},
+        {"name": "H5/Font Weight", "type": "Number", "value": 500},
+        {"name": "H5/Line Height", "type": "Number", "value": 1.4},
+        {"name": "H5/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "H5/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.5}},
+
+        {"_group": "H6", "name": "H6/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "H6/Font Size Min (rem)", "type": "Number", "value": 0.9},
+        {"name": "H6/Font Size Max (rem)", "type": "Number", "value": 1},
+        {"name": "H6/Font Weight", "type": "Number", "value": 500},
+        {"name": "H6/Line Height", "type": "Number", "value": 1.4},
+        {"name": "H6/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "H6/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 0.6}},
+
+        {"_group": "Paragraph XL", "name": "Paragraph XL/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Paragraph XL/Font Size Min (rem)", "type": "Number", "value": 1.2},
+        {"name": "Paragraph XL/Font Size Max (rem)", "type": "Number", "value": 1.5},
+        {"name": "Paragraph XL/Font Weight", "type": "Number", "value": 400},
+        {"name": "Paragraph XL/Line Height", "type": "Number", "value": 1.4},
+        {"name": "Paragraph XL/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Paragraph XL/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 1}},
+
+        {"_group": "Paragraph LG", "name": "Paragraph LG/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Paragraph LG/Font Size Min (rem)", "type": "Number", "value": 1.1},
+        {"name": "Paragraph LG/Font Size Max (rem)", "type": "Number", "value": 1.25},
+        {"name": "Paragraph LG/Font Weight", "type": "Number", "value": 400},
+        {"name": "Paragraph LG/Line Height", "type": "Number", "value": 1.5},
+        {"name": "Paragraph LG/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Paragraph LG/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 1}},
+
+        {"_group": "Paragraph Body", "name": "Paragraph (Body)/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Paragraph (Body)/Font Size Min (rem)", "type": "Number", "value": 0.9},
+        {"name": "Paragraph (Body)/Font Size Max (rem)", "type": "Number", "value": 1},
+        {"name": "Paragraph (Body)/Font Weight", "type": "Number", "value": 400},
+        {"name": "Paragraph (Body)/Line Height", "type": "Number", "value": 1.6},
+        {"name": "Paragraph (Body)/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Paragraph (Body)/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 1}},
+
+        {"_group": "Paragraph SM", "name": "Paragraph SM/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Paragraph SM/Font Size Min (rem)", "type": "Number", "value": 0.8},
+        {"name": "Paragraph SM/Font Size Max (rem)", "type": "Number", "value": 0.9},
+        {"name": "Paragraph SM/Font Weight", "type": "Number", "value": 400},
+        {"name": "Paragraph SM/Line Height", "type": "Number", "value": 1.5},
+        {"name": "Paragraph SM/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Paragraph SM/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 1}},
+
+        {"_group": "Eyebrow", "name": "Eyebrow/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Eyebrow/Font Size Min (rem)", "type": "Number", "value": 0.7},
+        {"name": "Eyebrow/Font Size Max (rem)", "type": "Number", "value": 0.8},
+        {"name": "Eyebrow/Font Weight", "type": "Number", "value": 500},
+        {"name": "Eyebrow/Line Height", "type": "Number", "value": 1.2},
+        {"name": "Eyebrow/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0.1}},
+        {"name": "Eyebrow/Bottom Margin", "type": "Size", "value": {"unit": "em", "value": 1.5}}
+      ]
+    },
+    {
+      "name": "Components",
+      "order": 4,
+      "description": "Component-level design tokens. Section padding, container width, card styling, button styling, input styling.",
+      "variables": [
+        {"_group": "Section", "name": "Section/Padding Min (rem)", "type": "Number", "value": 3},
+        {"name": "Section/Padding Max (rem)", "type": "Number", "value": 6},
+
+        {"_group": "Container", "name": "Container/Gutter", "type": "Size", "value": {"unit": "vw", "value": 6}},
+
+        {"_group": "Card", "name": "Card/Border Radius", "type": "Size", "value": {"unit": "rem", "value": 0.5}, "brandToken": "borderRadius"},
+        {"name": "Card/Padding Min (rem)", "type": "Number", "value": 1},
+        {"name": "Card/Padding Max (rem)", "type": "Number", "value": 1.5},
+
+        {"_group": "Button", "name": "Button/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Button/Font Weight", "type": "Number", "value": 400},
+        {"name": "Button/Font Size", "type": "Size", "value": {"unit": "rem", "value": 1}},
+        {"name": "Button/Line Height", "type": "Size", "value": {"unit": "em", "value": 1.3}},
+        {"name": "Button/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Button/Border Radius", "type": "Size", "value": {"unit": "rem", "value": 0.5}, "brandToken": "borderRadius"},
+        {"name": "Button/Vertical Padding", "type": "Size", "value": {"unit": "em", "value": 0.7}},
+        {"name": "Button/Horizontal Padding", "type": "Size", "value": {"unit": "em", "value": 1}},
+
+        {"_group": "Input", "name": "Input/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Input/Font Weight", "type": "Number", "value": 400},
+        {"name": "Input/Font Size", "type": "Size", "value": {"unit": "rem", "value": 1}},
+        {"name": "Input/Line Height", "type": "Size", "value": {"unit": "em", "value": 1.5}},
+        {"name": "Input/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}},
+        {"name": "Input/Border Radius", "type": "Size", "value": {"unit": "rem", "value": 0.5}, "brandToken": "borderRadius"},
+        {"name": "Input/Bottom Margin", "type": "Size", "value": {"unit": "rem", "value": 1}},
+
+        {"_group": "Input Label", "name": "Input Label/Font", "type": "FontFamily", "value": {"alias": "Fonts/Primary Font"}},
+        {"name": "Input Label/Font Weight", "type": "Number", "value": 500},
+        {"name": "Input Label/Font Size", "type": "Size", "value": {"unit": "rem", "value": 0.9}},
+        {"name": "Input Label/Line Height", "type": "Size", "value": {"unit": "em", "value": 1}},
+        {"name": "Input Label/Letter Spacing", "type": "Size", "value": {"unit": "em", "value": 0}}
+      ]
+    },
+    {
+      "name": "Layout",
+      "order": 5,
+      "description": "Grid system and spacing scale. Controls the 12-column grid, gap sizes, margin scale, and fluid type viewport range.",
+      "variables": [
+        {"_group": "Grid", "name": "Grid/Columns", "type": "Number", "value": 12},
+        {"name": "Grid/Gap Main", "type": "Size", "value": {"unit": "px", "value": 40}},
+        {"name": "Grid/Gap MD", "type": "Size", "value": {"unit": "px", "value": 24}},
+        {"name": "Grid/Gap SM", "type": "Size", "value": {"unit": "px", "value": 8}},
+        {"name": "Grid/Gap Button", "type": "Size", "value": {"unit": "px", "value": 16}},
+
+        {"_group": "Spacing", "name": "Spacing/Margin XS", "type": "Size", "value": {"unit": "em", "value": 0.5}},
+        {"name": "Spacing/Margin SM", "type": "Size", "value": {"unit": "em", "value": 1}},
+        {"name": "Spacing/Margin MD", "type": "Size", "value": {"unit": "em", "value": 2}},
+        {"name": "Spacing/Margin LG", "type": "Size", "value": {"unit": "em", "value": 3}},
+
+        {"_group": "Fluid", "name": "Fluid/Max", "type": "Number", "value": 90, "description": "Max viewport width for fluid type scaling (rem)"},
+        {"name": "Fluid/Min", "type": "Number", "value": 20, "description": "Min viewport width for fluid type scaling (rem)"}
+      ]
+    }
+  ],
+  "brandTokenMapping": {
+    "_description": "Maps brand-tokens.json keys to which MAST variables they affect. The skill uses this to know exactly what to update.",
+    "primaryAccent": ["Color > Primary/{colorName}"],
+    "primaryAccentDark": ["Color > Primary/Dark {colorName}"],
+    "infoColor": ["Color > Secondary/{colorName}"],
+    "secondaryColor": ["Color > Secondary/{colorName}"],
+    "borderLight": ["Color > Neutral/Mid Gray 1"],
+    "borderDark": ["Color > Neutral/Mid Gray 2"],
+    "textLight": ["Color > Neutral/Black"],
+    "fontFamily": ["Typography > Fonts/Primary Font"],
+    "borderRadius": ["Components > Card/Border Radius", "Components > Button/Border Radius", "Components > Input/Border Radius"]
+  },
+  "creationOrder": [
+    "1. Color collection (raw palette — no dependencies)",
+    "2. Layout collection (grid + spacing — no dependencies)",
+    "3. Typography collection (references Layout/Fluid for clamp calc, references own Primary Font for aliases)",
+    "4. Theme collection with Accent mode (references Color variables via light-dark())",
+    "5. Components collection (references Typography/Primary Font for font aliases, references Layout/Fluid for clamp calc)"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "flowkit": {
+    "name": "Flowkit",
+    "url": "https://developers.webflow.com/flowkit/getting-started/intro",
+    "prefixes": ["fk-"],
+    "stateModifiers": ["is-"],
+    "comboClassPattern": "fk-[component].[modifier]",
+    "componentNaming": "Component/Variant",
+    "detection": {
+      "scriptFingerprints": ["flowkit"],
+      "componentPatterns": ["^[A-Z][a-z]+/[A-Z][a-z]+"]
+    }
+  },
+  "client-first": {
+    "name": "Client-First",
+    "url": "https://finsweet.com/client-first/docs",
+    "prefixes": ["c-", "cc-"],
+    "stateModifiers": ["is-", "has-"],
+    "comboClassPattern": "c-[component].cc-[modifier]",
+    "componentNaming": "Section/Variant",
+    "detection": {
+      "scriptFingerprints": ["finsweet", "fs-"],
+      "componentPatterns": ["^(Section|Layout|Component)/"]
+    }
+  },
+  "relume": {
+    "name": "Relume",
+    "url": "https://www.relume.io/resources/docs/customizing-the-relume-style-guide-for-webflow",
+    "prefixes": ["rl-"],
+    "stateModifiers": ["is-"],
+    "comboClassPattern": "rl-[component].[modifier]",
+    "componentNaming": "Relume - Component",
+    "detection": {
+      "scriptFingerprints": ["relume"],
+      "componentPatterns": ["^Relume"]
+    }
+  },
+  "mast": {
+    "name": "Mast",
+    "url": "https://www.nocodesupply.co/mast/docs",
+    "prefixes": ["mast-"],
+    "stateModifiers": [],
+    "comboClassPattern": "mast-[component]-[modifier]",
+    "componentNaming": "mast-component",
+    "detection": {
+      "scriptFingerprints": ["mast", "nocodesupply"],
+      "componentPatterns": ["^mast-"]
+    }
+  },
+  "lumos": {
+    "name": "Lumos",
+    "url": "https://timothyricks.notion.site/Lumos-Framework-6d1139068f7442d49494ec3b581cf09d",
+    "prefixes": ["lumos-"],
+    "stateModifiers": [],
+    "comboClassPattern": "lumos-[component]-[modifier]",
+    "componentNaming": "lumos-component",
+    "detection": {
+      "scriptFingerprints": ["lumos", "timothyricks"],
+      "componentPatterns": ["^lumos-"]
+    }
+  },
+  "bem": {
+    "name": "BEM",
+    "url": "https://getbem.com",
+    "prefixes": [],
+    "stateModifiers": ["--"],
+    "comboClassPattern": "[block]__[element]--[modifier]",
+    "componentNaming": "block__element",
+    "detection": {
+      "scriptFingerprints": [],
+      "componentPatterns": ["__", "--"]
+    }
+  },
+  "smacss": {
+    "name": "SMACSS",
+    "url": "https://smacss.com",
+    "prefixes": ["l-", "is-", "has-"],
+    "stateModifiers": ["is-", "has-"],
+    "comboClassPattern": "[category]-[name]",
+    "componentNaming": "l-layout, m-module",
+    "detection": {
+      "scriptFingerprints": [],
+      "componentPatterns": ["^l-", "^m-", "^is-", "^has-"]
+    }
+  },
+  "cube-css": {
+    "name": "CUBE CSS",
+    "url": "https://cube.fyi",
+    "prefixes": [],
+    "stateModifiers": ["data-"],
+    "comboClassPattern": "[composition] [utility] [block] [exception]",
+    "componentNaming": "semantic blocks",
+    "detection": {
+      "scriptFingerprints": [],
+      "componentPatterns": ["\\[data-"]
+    }
+  },
+  "tailwind": {
+    "name": "Tailwind",
+    "url": "https://tailwindcss.com/docs",
+    "prefixes": [],
+    "stateModifiers": [],
+    "comboClassPattern": "[utility classes]",
+    "componentNaming": "utility-first",
+    "detection": {
+      "scriptFingerprints": ["tailwind"],
+      "componentPatterns": ["^(flex|grid|p-|m-|text-|bg-|border-)"]
+    }
+  }
+}

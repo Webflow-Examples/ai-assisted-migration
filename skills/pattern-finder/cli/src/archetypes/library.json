@@ -1,0 +1,563 @@
+{
+  "version": "0.2.0",
+  "generated_at": "2026-04-28",
+  "note": "v0.2.1 — gates relaxed where Phase 2 over-segmentation made them unreliable. Position-based gates removed from heroes/nav (header chrome explodes into 4-5 sub-widgets, pushing real heroes past pos 4). Layout gates broadened to tolerate single-wrapper/stack layouts that visually present as multi-col. Signal-class gates retained for testimonial/logo-cloud/team etc. — those were the precision wins.",
+  "archetypes": [
+    {
+      "id": "header-contact-bar",
+      "version": "1",
+      "display_name": "Header — utility/contact bar",
+      "category": "header",
+      "description": "Thin top strip with mailto/tel links, sometimes language switcher",
+      "match_rules": {
+        "gates": {
+          "section_role_hints": ["header"],
+          "position_index_max": 4,
+          "word_count_max": 40
+        },
+        "dom": {
+          "must_contain_class": ["icon-list", "topbar", "utility"],
+          "builder_block_type_includes": ["icon-list"],
+          "child_count_range": [1, 4]
+        },
+        "content": { "max_words": 40, "max_images": 2, "min_links": 1, "max_links": 6 }
+      },
+      "confidence_weights": { "dom": 0.7, "content": 0.3 },
+      "vision_prompt_hint": "Thin utility bar at the very top of the page with contact info or language switcher",
+      "content_schema": { "links": "a[href^='mailto:|tel:']" }
+    },
+    {
+      "id": "nav-primary",
+      "version": "1",
+      "display_name": "Navigation — primary",
+      "category": "nav",
+      "description": "Main site navigation: logo + menu links + (optional) CTA",
+      "match_rules": {
+        "gates": {
+          "section_role_hints": ["header", "nav"]
+        },
+        "dom": {
+          "must_contain_class": ["nav-menu", "menu-main", "elementor-nav-menu", "site-navigation", "main-menu", "header-menu"],
+          "builder_block_type_includes": ["nav-menu"]
+        },
+        "content": { "min_links": 4, "max_words": 80 }
+      },
+      "confidence_weights": { "dom": 0.75, "content": 0.25 },
+      "vision_prompt_hint": "Primary horizontal navigation bar with logo and menu links",
+      "content_schema": { "logo": "img.logo", "links": "a", "cta": "a.button" }
+    },
+    {
+      "id": "nav-mega-menu",
+      "version": "1",
+      "display_name": "Navigation — mega menu",
+      "category": "nav",
+      "description": "Multi-column dropdown nav with featured items",
+      "match_rules": {
+        "gates": {
+          "section_role_hints": ["header", "nav"],
+          "must_contain_class_any": ["mega", "submenu", "elementor-nav-menu--main"]
+        },
+        "dom": { "child_layout": ["three-col", "four-col"] },
+        "content": { "min_links": 12 }
+      },
+      "confidence_weights": { "dom": 0.7, "content": 0.3 },
+      "vision_prompt_hint": "Wide multi-column dropdown menu with grouped links",
+      "content_schema": { "columns": ".mega-col" }
+    },
+    {
+      "id": "hero-split-text-image",
+      "version": "1",
+      "display_name": "Hero — split, text + image",
+      "category": "hero",
+      "description": "Two-column hero: headline + subhead + CTA(s) on one side, image/video on the other",
+      "match_rules": {
+        "gates": {
+          "position_index_max": 6,
+          "child_layout_any": ["two-col"],
+          "heading_count_min": 1,
+          "image_count_min": 1,
+          "link_count_min": 1,
+          "must_have": { "has_form": false }
+        },
+        "dom": { "child_layout": ["two-col"] },
+        "content": { "min_headings": 1, "min_images": 1, "min_words": 15, "min_links": 1 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Two-column hero. Headline + CTA on one side, image/screenshot/illustration on the other.",
+      "content_schema": {
+        "headline": "h1, h2",
+        "subhead": "p",
+        "primary_cta": "a.button:nth-of-type(1)",
+        "secondary_cta": "a.button:nth-of-type(2)",
+        "media": "img, picture, video"
+      }
+    },
+    {
+      "id": "hero-centered-cta",
+      "version": "1",
+      "display_name": "Hero — centered, headline + CTA",
+      "category": "hero",
+      "description": "Single-column centered hero: big headline + subhead + 1-2 CTAs",
+      "match_rules": {
+        "gates": {
+          "position_index_max": 5,
+          "heading_count_min": 1,
+          "word_count_min": 10,
+          "word_count_max": 120,
+          "link_count_min": 1,
+          "must_have": { "has_form": false, "has_video": false }
+        },
+        "dom": { "child_layout": ["single", "stack"] },
+        "content": { "min_headings": 1, "min_words": 10, "max_images": 2, "min_links": 1, "max_links": 4 }
+      },
+      "confidence_weights": { "dom": 0.4, "content": 0.6 },
+      "vision_prompt_hint": "Centered hero with a single big headline, optional subhead, and one or two buttons",
+      "content_schema": { "headline": "h1, h2", "subhead": "p", "ctas": "a.button" }
+    },
+    {
+      "id": "hero-video-bg",
+      "version": "1",
+      "display_name": "Hero — video background",
+      "category": "hero",
+      "description": "Hero with full-bleed background video",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_video": true },
+          "heading_count_min": 1
+        },
+        "dom": {},
+        "content": { "min_headings": 1 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Full-width hero with autoplay background video behind text",
+      "content_schema": { "video": "video, iframe", "headline": "h1, h2" }
+    },
+    {
+      "id": "hero-with-form",
+      "version": "1",
+      "display_name": "Hero — split with lead form",
+      "category": "hero",
+      "description": "Hero where one side is a contact/demo-request form",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_form": true },
+          "heading_count_min": 1
+        },
+        "dom": { "child_layout": ["two-col"] },
+        "content": { "min_headings": 1, "has_form": true, "min_words": 10 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Hero with marketing copy on one side and a 'request demo' form on the other",
+      "content_schema": { "headline": "h1, h2", "subhead": "p", "form": "form" }
+    },
+    {
+      "id": "logo-cloud",
+      "version": "1",
+      "display_name": "Logo cloud",
+      "category": "social-proof",
+      "description": "Row/grid of customer/partner logos, often grayscale, often a carousel",
+      "match_rules": {
+        "gates": {
+          "image_count_min": 4,
+          "word_count_max": 50
+        },
+        "dom": {
+          "must_contain_class": [
+            "image-carousel",
+            "elementor-widget-image-carousel",
+            "logo-cloud",
+            "clients",
+            "partners",
+            "swiper",
+            "logos"
+          ],
+          "builder_block_type_includes": ["image-carousel", "image-gallery", "logo"]
+        },
+        "content": { "min_images": 4, "max_words": 50 }
+      },
+      "confidence_weights": { "dom": 0.55, "content": 0.45 },
+      "vision_prompt_hint": "Horizontal strip of customer/brand logos",
+      "content_schema": { "logos": "img" }
+    },
+    {
+      "id": "stat-row",
+      "version": "1",
+      "display_name": "Stats row",
+      "category": "social-proof",
+      "description": "Row of headline numbers with short labels",
+      "match_rules": {
+        "gates": {
+          "heading_count_min": 2,
+          "word_count_min": 6,
+          "word_count_max": 80
+        },
+        "dom": { "child_layout": ["three-col", "four-col"] },
+        "content": { "min_words": 6, "max_words": 80, "max_images": 4, "min_headings": 2 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Row of large numbers (e.g., '500+', '99.9%') with short descriptive labels under each",
+      "content_schema": { "stats": ".stat" }
+    },
+    {
+      "id": "feature-grid-3",
+      "version": "1",
+      "display_name": "Feature grid — 3 cards",
+      "category": "features",
+      "description": "Three-column feature cards with icon/image + heading + body",
+      "match_rules": {
+        "gates": {
+          "heading_count_min": 2,
+          "word_count_min": 30
+        },
+        "dom": { "child_layout": ["three-col"] },
+        "content": { "min_headings": 2, "min_words": 30, "max_links": 8 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Three feature cards in a row, each with an icon, heading, and short paragraph",
+      "content_schema": { "cards": ".card" }
+    },
+    {
+      "id": "feature-grid-4",
+      "version": "1",
+      "display_name": "Feature grid — 4 cards",
+      "category": "features",
+      "description": "Four-column feature/benefit cards",
+      "match_rules": {
+        "gates": {
+          "heading_count_min": 3,
+          "word_count_min": 30
+        },
+        "dom": { "child_layout": ["four-col"] },
+        "content": { "min_headings": 3, "min_words": 30 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Four-up grid of feature cards",
+      "content_schema": { "cards": ".card" }
+    },
+    {
+      "id": "feature-alternating",
+      "version": "1",
+      "display_name": "Feature — alternating side-by-side",
+      "category": "features",
+      "description": "Two-column feature block: text + image, often part of a series that alternates sides",
+      "match_rules": {
+        "gates": {
+          "image_count_min": 1,
+          "word_count_min": 50,
+          "heading_count_min": 1
+        },
+        "dom": { "child_layout": ["two-col"] },
+        "content": { "min_headings": 1, "min_words": 50, "min_images": 1 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Side-by-side text + visual block; multiple stacked vertically often alternate sides",
+      "content_schema": { "headline": "h2, h3", "body": "p", "media": "img, picture, video" }
+    },
+    {
+      "id": "testimonial-single",
+      "version": "1",
+      "display_name": "Testimonial — single quote",
+      "category": "social-proof",
+      "description": "One large pull-quote with attribution + headshot",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": [
+            "testimonial",
+            "quote",
+            "review",
+            "blockquote",
+            "rating",
+            "elementor-widget-blockquote",
+            "elementor-widget-testimonial"
+          ],
+          "word_count_min": 30,
+          "word_count_max": 250
+        },
+        "dom": {},
+        "content": { "min_words": 30, "max_words": 250, "max_links": 3 }
+      },
+      "confidence_weights": { "dom": 0.4, "content": 0.6 },
+      "vision_prompt_hint": "One large customer quote with attribution (name, title, company) and optional headshot",
+      "content_schema": { "quote": "blockquote, p", "name": ".name", "headshot": "img" }
+    },
+    {
+      "id": "testimonial-grid",
+      "version": "1",
+      "display_name": "Testimonial — grid",
+      "category": "social-proof",
+      "description": "Multiple testimonial cards laid out in a grid",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": ["testimonial", "quote", "review", "rating"],
+          "word_count_min": 80
+        },
+        "dom": { "child_layout": ["two-col", "three-col", "four-col"] },
+        "content": { "min_words": 80, "min_headings": 2 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Multiple customer testimonial cards in a grid",
+      "content_schema": { "testimonials": ".testimonial" }
+    },
+    {
+      "id": "testimonial-carousel",
+      "version": "1",
+      "display_name": "Testimonial — carousel",
+      "category": "social-proof",
+      "description": "Sliding/auto-rotating testimonials",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_carousel": true },
+          "must_contain_class_any": ["testimonial", "quote", "review"]
+        },
+        "dom": {},
+        "content": { "min_words": 30 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Carousel/slider showing one testimonial at a time with arrows or dots",
+      "content_schema": { "slides": ".swiper-slide" }
+    },
+    {
+      "id": "pricing-tiers",
+      "version": "1",
+      "display_name": "Pricing — tiered cards",
+      "category": "pricing",
+      "description": "2-4 pricing tier cards side by side, each with a feature list",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": ["pricing", "tier", "plan", "package"],
+          "heading_count_min": 2
+        },
+        "dom": { "child_layout": ["two-col", "three-col", "four-col"] },
+        "content": { "min_headings": 2, "min_words": 100 }
+      },
+      "confidence_weights": { "dom": 0.55, "content": 0.45 },
+      "vision_prompt_hint": "Tiered pricing cards with plan name, price, and bulleted features",
+      "content_schema": { "tiers": ".tier" }
+    },
+    {
+      "id": "comparison-table",
+      "version": "1",
+      "display_name": "Comparison table",
+      "category": "comparison",
+      "description": "Feature-by-feature comparison (us vs competitor)",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": ["comparison", "compare", "vs", "competitor"],
+          "word_count_min": 80
+        },
+        "dom": {},
+        "content": { "min_words": 100 }
+      },
+      "confidence_weights": { "dom": 0.55, "content": 0.45 },
+      "vision_prompt_hint": "Side-by-side comparison table or matrix (us vs them) with checkmarks",
+      "content_schema": { "rows": "tr" }
+    },
+    {
+      "id": "cta-banner",
+      "version": "1",
+      "display_name": "CTA banner",
+      "category": "cta",
+      "description": "Bold call-to-action band: headline + button(s)",
+      "match_rules": {
+        "gates": {
+          "heading_count_min": 1,
+          "word_count_min": 8,
+          "word_count_max": 100,
+          "link_count_min": 1,
+          "must_have": { "has_form": false }
+        },
+        "dom": {},
+        "content": { "min_headings": 1, "max_words": 100, "min_links": 1, "max_links": 3, "max_images": 2 }
+      },
+      "confidence_weights": { "dom": 0.4, "content": 0.6 },
+      "vision_prompt_hint": "Standalone band/banner with a short headline and one or two CTA buttons",
+      "content_schema": { "headline": "h2, h3", "ctas": "a.button" }
+    },
+    {
+      "id": "faq-accordion",
+      "version": "1",
+      "display_name": "FAQ — accordion",
+      "category": "faq",
+      "description": "Collapsible Q&A list",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_accordion": true },
+          "heading_count_min": 2,
+          "word_count_min": 50
+        },
+        "dom": {},
+        "content": { "min_words": 50, "min_headings": 2 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "List of FAQ items with chevron toggles, expand to show answers",
+      "content_schema": { "items": ".accordion-item" }
+    },
+    {
+      "id": "tabs-feature-detail",
+      "version": "1",
+      "display_name": "Tabs — feature detail",
+      "category": "features",
+      "description": "Tabbed interface where each tab shows a feature deep-dive",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_tabs": true },
+          "word_count_min": 50
+        },
+        "dom": {},
+        "content": { "min_words": 50 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Horizontal tabs that swap content panels showing different features",
+      "content_schema": { "tabs": "[role='tab']", "panels": "[role='tabpanel']" }
+    },
+    {
+      "id": "blog-card-grid",
+      "version": "1",
+      "display_name": "Blog post grid",
+      "category": "content-list",
+      "description": "Grid of blog/article cards (image + title + excerpt)",
+      "match_rules": {
+        "gates": {
+          "heading_count_min": 2,
+          "image_count_min": 2,
+          "must_have": { "has_form": false }
+        },
+        "dom": {
+          "child_layout": ["two-col", "three-col", "four-col"],
+          "must_contain_class": ["post", "blog", "article", "loop"]
+        },
+        "content": { "min_headings": 2, "min_images": 2, "min_links": 2 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Grid of blog post cards with cover image, title, and short excerpt",
+      "content_schema": { "cards": ".post" }
+    },
+    {
+      "id": "case-study-grid",
+      "version": "1",
+      "display_name": "Case study grid",
+      "category": "content-list",
+      "description": "Grid of customer case study cards (logo + outcome + link)",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": ["case-study", "case_study", "story", "customer", "success"],
+          "image_count_min": 2
+        },
+        "dom": { "child_layout": ["two-col", "three-col"] },
+        "content": { "min_images": 2, "min_words": 50 }
+      },
+      "confidence_weights": { "dom": 0.55, "content": 0.45 },
+      "vision_prompt_hint": "Grid of customer case study cards with logos and outcomes",
+      "content_schema": { "cards": ".case-study" }
+    },
+    {
+      "id": "contact-form",
+      "version": "1",
+      "display_name": "Contact form",
+      "category": "form",
+      "description": "Standalone contact / demo-request form section",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_form": true },
+          "word_count_min": 5
+        },
+        "dom": {},
+        "content": { "has_form": true, "min_words": 5 }
+      },
+      "confidence_weights": { "dom": 0.5, "content": 0.5 },
+      "vision_prompt_hint": "Form section with input fields and a submit button",
+      "content_schema": { "headline": "h2, h3", "fields": "input, textarea, select", "submit": "button[type=submit]" }
+    },
+    {
+      "id": "newsletter-signup",
+      "version": "1",
+      "display_name": "Newsletter signup",
+      "category": "form",
+      "description": "Single-field email subscribe band",
+      "match_rules": {
+        "gates": {
+          "must_have": { "has_form": true },
+          "must_contain_class_any": ["newsletter", "subscribe", "signup", "email-signup"],
+          "word_count_max": 100
+        },
+        "dom": {},
+        "content": { "has_form": true, "max_words": 100 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Compact email subscribe band: short pitch + email input + submit",
+      "content_schema": { "email_field": "input[type=email]", "submit": "button" }
+    },
+    {
+      "id": "team-grid",
+      "version": "1",
+      "display_name": "Team — member grid",
+      "category": "about",
+      "description": "Grid of team member cards: photo + name + role",
+      "match_rules": {
+        "gates": {
+          "must_contain_class_any": ["team", "people", "leadership", "staff", "member"],
+          "image_count_min": 3,
+          "heading_count_min": 3
+        },
+        "dom": { "child_layout": ["three-col", "four-col"] },
+        "content": { "min_images": 3, "min_headings": 3 }
+      },
+      "confidence_weights": { "dom": 0.55, "content": 0.45 },
+      "vision_prompt_hint": "Grid of team-member cards with portrait photos and names/titles",
+      "content_schema": { "members": ".member" }
+    },
+    {
+      "id": "footer-multi-column",
+      "version": "1",
+      "display_name": "Footer — multi-column",
+      "category": "footer",
+      "description": "Footer with 3-5 columns of grouped links + social icons",
+      "match_rules": {
+        "gates": {
+          "section_role_hints": ["footer"]
+        },
+        "dom": { "child_layout": ["three-col", "four-col"] },
+        "content": { "min_links": 8 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Wide footer with multiple columns of grouped navigation links and social icons",
+      "content_schema": { "columns": ".footer-col", "social": ".social a" }
+    },
+    {
+      "id": "footer-simple",
+      "version": "1",
+      "display_name": "Footer — simple",
+      "category": "footer",
+      "description": "Slim footer: copyright + a few legal links",
+      "match_rules": {
+        "gates": {
+          "section_role_hints": ["footer"],
+          "word_count_max": 80
+        },
+        "dom": {},
+        "content": { "max_words": 80, "min_links": 1, "max_links": 8 }
+      },
+      "confidence_weights": { "dom": 0.6, "content": 0.4 },
+      "vision_prompt_hint": "Slim footer band with copyright and a few legal links",
+      "content_schema": { "copyright": "p", "links": "a" }
+    },
+    {
+      "id": "rich-text-block",
+      "version": "1",
+      "display_name": "Rich-text content block",
+      "category": "content",
+      "description": "Long-form prose section (article body, policy, etc.)",
+      "match_rules": {
+        "gates": {
+          "word_count_min": 200,
+          "must_have": { "has_form": false }
+        },
+        "dom": {},
+        "content": { "min_words": 200, "max_images": 4, "max_links": 30 }
+      },
+      "confidence_weights": { "dom": 0.3, "content": 0.7 },
+      "vision_prompt_hint": "Long-form article/prose content with headings and paragraphs",
+      "content_schema": { "headings": "h2, h3", "paragraphs": "p" }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "_comment_top": "Annotated example archetype. Copy this entry into cli/src/archetypes/library.json and tune for the pattern you're capturing. Strip the underscore-prefixed comment fields before saving — they're documentation only.",
+
+  "id": "feature-row-icon",
+  "_comment_id": "Stable kebab-case identifier. Used to derive CSS prefixes. NEVER rename without versioning.",
+
+  "version": "1",
+  "_comment_version": "Bump when match rules or content schema change in a way that invalidates prior runs.",
+
+  "display_name": "Feature row — icon + heading + body",
+  "_comment_display_name": "Used as the Webflow Component name when this archetype gets promoted.",
+
+  "category": "features",
+  "_comment_category": "Loose grouping. Suggested values: hero, nav, header, features, social-proof, cta, testimonial, footer, faq, content, form.",
+
+  "description": "Horizontal row with a small icon, a short heading, and a 1-2 sentence body. Common in mid-page benefit/feature lists.",
+
+  "match_rules": {
+    "_comment_match_rules": "Three layers — gates (binary), dom (soft), content (soft). Gates filter; dom/content score.",
+
+    "gates": {
+      "_comment_gates": "Hard requirements. ANY failure → confidence 0. Use sparingly; over-strict gates filter real matches.",
+      "child_layout_any": ["two-col"],
+      "image_count_min": 1,
+      "image_count_max": 1,
+      "heading_count_min": 1,
+      "heading_count_max": 2,
+      "must_have": { "has_form": false, "has_carousel": false }
+    },
+
+    "dom": {
+      "_comment_dom": "Soft DOM scoring. Each rule that passes adds points (weighted by confidence_weights.dom).",
+      "child_layout": ["two-col"],
+      "must_contain_class": ["feature", "icon-feature", "benefit"],
+      "must_not_contain_class": ["card", "tile"]
+    },
+
+    "content": {
+      "_comment_content": "Soft content scoring against the section's content bag.",
+      "min_headings": 1,
+      "max_headings": 2,
+      "min_images": 1,
+      "max_images": 1,
+      "min_words": 10,
+      "max_words": 80
+    }
+  },
+
+  "confidence_weights": {
+    "_comment_weights": "How DOM vs content scoring blend. {dom: 0.5, content: 0.5} is the safe default. Use higher dom for layout-distinctive patterns; higher content for text-driven patterns.",
+    "dom": 0.5,
+    "content": 0.5
+  },
+
+  "vision_prompt_hint": "Horizontal feature row: small icon (24-64px) on the left, a short heading and 1-2 sentences of body text on the right. Often appears in groups of 3-6 stacked vertically.",
+  "_comment_vision_prompt_hint": "ONE sentence given to Claude during the vision-fallback phase. Helps disambiguate this archetype from siblings (e.g., feature-row-image, feature-row-stat).",
+
+  "content_schema": {
+    "_comment_content_schema": "Slot definitions for the rebuilder. Each slot becomes a Webflow Component prop OR an inserted slot.",
+
+    "icon": {
+      "selector": "img, svg, .icon, .feather",
+      "cardinality": "1",
+      "example": "Small 32-48px icon at the start of the row."
+    },
+    "heading": {
+      "selector": "h2, h3, h4",
+      "cardinality": "1",
+      "example": "Save up to 30% on rentals"
+    },
+    "body": {
+      "selector": "p",
+      "cardinality": "1..2",
+      "example": "1-2 sentences of supporting copy explaining the benefit."
+    }
+  }
+}
